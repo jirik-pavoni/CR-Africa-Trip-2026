@@ -223,8 +223,8 @@
     }
     @media (max-width: 960px) {
       .hero { grid-template-columns: 1fr; min-height: auto; max-width: 100vw; padding-top: 0; }
-      .hero-map-col { min-height: 75vw; height: auto; justify-content: center; padding: 1rem; }
-      .hero-map-col img { width: 80vw; max-width: 80vw; height: auto; max-height: none; object-position: center top; }
+      .hero-map-col { min-height: 85vw; height: auto; justify-content: center; padding: 0; overflow: visible; }
+      .hero-map-col img { width: 100vw; max-width: 100vw; height: auto; max-height: none; object-position: center top; margin: 0; }
       .hero-logo-banner { padding: 1.5rem 2rem 0.5rem; }
       .hero-content { padding: 1.5rem 2rem 2.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -235,7 +235,7 @@
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
       .nav-links li:not(:last-child) { display: none; }
-      .hero-map-col { height: auto; padding: 1rem; }
+      .hero-map-col { height: auto; padding: 0; }
       .hero-logo-banner { padding: 1rem 1.25rem 0.25rem; }
       .hero-content { padding: 1rem 1.25rem 2rem; }
       .section { padding: 4rem 0; }
@@ -614,6 +614,64 @@
       margin: 0;
     }
 
+  
+    /* ── REVOLUT DONATE BUTTON ── */
+    .revolut-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: #F5C400;
+      color: #111111;
+      padding: 1rem 2.5rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-radius: 50px;
+      text-decoration: none;
+      width: 100%;
+      max-width: 420px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(245,196,0,0.35);
+    }
+    .revolut-btn:hover { background: #e0b000; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(245,196,0,0.5); }
+    .revolut-sub { font-size: 0.75rem; color: var(--gray); margin-top: 0.6rem; text-align: center; }
+
+    /* Pack info box */
+    .pack-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--off-white);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+    }
+    .pack-label {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+    .pack-desc { font-size: 0.85rem; color: var(--gray); margin: 0; }
+    .pack-box-right { text-align: right; flex-shrink: 0; }
+    .pack-price {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .pack-price small { font-size: 1rem; }
+    .pack-per { font-size: 0.72rem; color: var(--gray); letter-spacing: 0.05em; }
+
+    /* Remove old km-options styles impact */
+    .km-options, .km-btn, .km-selector-label { display: none; }
+
   </style>
 </head>
 <body>
@@ -859,28 +917,38 @@
   <div class="section-inner">
     <p class="section-label">Support the Journey</p>
     <h2 class="section-title reveal">Journey Backer Pack</h2>
-    <p class="donate-intro reveal">Help me complete the 4,000 km challenge. Each donation covers 100 km of this solo, unsupported ride from Europe to Africa. You can back one segment &mdash; or more if you wish. <strong>Only 40 packs available.</strong></p>
+    <p class="donate-intro reveal">Help me complete the 4,000&nbsp;km challenge. Each pack covers <strong>100&nbsp;km</strong> of this solo, unsupported ride from Europe to Africa &mdash; equal to <strong>20&nbsp;EUR</strong>. You can buy more than one pack if you'd like to make a bigger impact. Only <strong>40 packs</strong> available.</p>
+
     <div class="donate-card reveal">
       <div class="donate-card-header">
-        <h3>&#x1F6B4; Journey Backer Pack &mdash; Help me complete 4,000 km</h3>
-        <p>Your donation represents one piece of my trip &mdash; 100 km = 20 EUR. You can donate for more kilometres if you'd like to make a bigger impact.</p>
+        <h3>&#x1F6B4; Journey Backer Pack &mdash; 100 km = 20 EUR</h3>
+        <p>One pack = 100 km of my ride. Buy one, or as many as you wish &mdash; every pack gets you a sticker.</p>
       </div>
       <div class="donate-card-body">
-        <span class="km-selector-label">Choose how many 100 km segments you'd like to back:</span>
-        <div class="km-options">
-          <button class="km-btn active" onclick="selectKm(this,100)"><span class="km-num">100</span><span class="km-label">km</span><span class="km-price">1 pack &middot; 20 EUR</span></button>
-          <button class="km-btn" onclick="selectKm(this,200)"><span class="km-num">200</span><span class="km-label">km</span><span class="km-price">2 packs &middot; 40 EUR</span></button>
-          <button class="km-btn" onclick="selectKm(this,500)"><span class="km-num">500</span><span class="km-label">km</span><span class="km-price">5 packs &middot; 100 EUR</span></button>
-          <button class="km-btn" onclick="selectKm(this,1000)"><span class="km-num">1000</span><span class="km-label">km</span><span class="km-price">10 packs &middot; 200 EUR</span></button>
+
+        <!-- Single pack info box -->
+        <div class="pack-box">
+          <div class="pack-box-left">
+            <span class="pack-label">&#x1F4E6; Journey Backer Pack</span>
+            <p class="pack-desc">100 km &middot; Solo &amp; Unsupported &middot; Europe &rarr; Africa</p>
+          </div>
+          <div class="pack-box-right">
+            <span class="pack-price">20 <small>EUR</small></span>
+            <span class="pack-per">per 100 km</span>
+          </div>
         </div>
-        <div class="donate-note">&#x1F381; Every backer receives a <strong>special sticker from the journey</strong> &mdash; sent personally by me once I return from the road. No public listing needed &mdash; just a heartfelt thank-you.</div>
+
+        <div class="donate-note">&#x1F381; Every backer receives a <strong>special sticker from the journey</strong> &mdash; sent personally by me once I return from the road. Want to back more kilometres? Just complete the payment multiple times.</div>
+
+        <!-- Revolut button -->
         <div class="paypal-btn-wrap">
-          <a id="paypal-link" href="https://www.paypal.com/donate/?business=YOUR_PAYPAL_EMAIL&currency_code=EUR&item_name=Journey+Backer+Pack+100km" target="_blank" class="paypal-btn">
-            Donate via PayPal &mdash; Back 100 km
+          <a href="https://revolut.me/matyaskguh?currency=EUR&amp;amount=2000&amp;note=Thank%20you,%20for%20supporting%20my%20journey" target="_blank" rel="noopener" class="revolut-btn">
+            Donate 20 EUR to back 100 km of my ride &#x2764;
           </a>
-          <p class="paypal-logo">Secure payment via PayPal &middot; No account required</p>
+          <p class="revolut-sub">Opens Revolut payment &middot; 20 EUR pre-filled &middot; Secure &amp; instant</p>
         </div>
-        <div class="packages-left">Only <span id="packs-left">40</span> support packs remaining out of 40</div>
+
+        <div class="packages-left">Only <span id="packs-left">40</span> Journey Backer Packs available &mdash; <span style="color:var(--red)">limited</span></div>
       </div>
     </div>
   </div>
@@ -903,7 +971,7 @@
          JOURNEY PHOTO GALLERY
          To add a new photo: copy one <div class="journey-card"> block,
          paste it inside the grid below, and fill in:
-           src="URL_FOTKY"   — URL or base64 of the image
+           src="YOUR_PHOTO_URL"   — URL or base64 of the image
            data-title=""     — caption shown on hover / below photo
            data-day=""       — e.g. "Day 3" or "19. 6. 2026"
          Photos appear newest-first (add new ones at the TOP of the list)
@@ -927,7 +995,7 @@
       <!-- TEMPLATE (hidden — copy & paste to add a photo):
       <div class="journey-card">
         <div class="journey-img-wrap">
-          <img src="URL_FOTKY" alt="Popis fotky" loading="lazy" />
+          <img src="YOUR_PHOTO_URL" alt="Photo description" loading="lazy" />
           <div class="journey-overlay">
             <span class="journey-day">Day 1</span>
             <span class="journey-title">Liberec — first pedal strokes</span>
