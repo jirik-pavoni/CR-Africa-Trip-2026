@@ -392,30 +392,33 @@
 
     /* ── MOBILE STICKY SUPPORT BUTTON ── */
     .sticky-support-btn {
-      display: none;
+      display: none; /* shown via JS class on mobile only */
       position: fixed;
       bottom: 0; left: 0; right: 0;
-      z-index: 999;
+      z-index: 9999;
       background: #F0F0F0;
       color: var(--red);
       text-align: center;
-      padding: 1rem 1.5rem;
+      padding: 1.1rem 1.5rem;
       font-family: var(--font-body);
       font-weight: 700;
       font-size: 1rem;
       text-decoration: none;
       box-shadow: 0 -3px 20px rgba(212,43,43,0.35);
+      transform: translateY(110%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
       letter-spacing: 0.03em;
     }
     .sticky-support-btn:active { background: #b52222; }
     @media (max-width: 960px) {
       .sticky-support-btn {
-        display: block;
-        transform: translateY(100%);
-        opacity: 0;
-        transition: transform 0.35s ease, opacity 0.35s ease;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
       }
-      body { padding-bottom: 60px !important; }
+      body { padding-bottom: 64px !important; }
     }
 
   
@@ -862,7 +865,7 @@
         This is my own private race &mdash; a challenge I created for myself as preparation for the 2027 Africa Crossing. No entry fees, no race director, just me, my bike, and the open road. <a href="#about" class="read-more" onclick="showTab('challenge')">Read more &rarr;</a>
       </p>
       <div class="hero-btns">
-        <a href="#donate" class="btn-support">&#x2764; Support the Journey</a>
+        <a href="#donate" class="btn-support">&#x2764; Support My Journey</a>
         <a href="#about" class="btn-outline">Read More</a>
       </div>
     </div>
@@ -949,7 +952,7 @@
               <span class="who-fact-label">&#x1F1E8;&#x1F1FF; From</span>
               <p>Liberec, Czech Republic</p>
             </div>
-            <a href="#donate" class="btn-support" style="margin-top:1.5rem;display:inline-flex;">&#x2764; Support the Journey</a>
+            <a href="#donate" class="btn-support" style="margin-top:1.5rem;display:inline-flex;">&#x2764; Support My Journey</a>
           </div>
         </div>
 
@@ -1017,7 +1020,7 @@
             <p style="margin-top:1.2rem;font-style:italic;color:#888;">Thank you for being part of this adventure.</p>
           </div>
           <div style="margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
-            <a href="#donate" class="btn-support">&#x2764; Support the Journey</a>
+            <a href="#donate" class="btn-support">&#x2764; Support My Journey</a>
           </div>
         </div>
 
@@ -1249,35 +1252,56 @@
   const heroSection = document.querySelector('.hero');
   const donateSection = document.getElementById('donate');
 
-  function updateStickyBtn() {
-    if (!stickyBtn) return;
-    const scrollY = window.scrollY || window.pageYOffset;
-    const heroH = heroSection ? heroSection.offsetHeight : 400;
-    // Show after hero, hide if donate is visible
-    if (scrollY < heroH * 0.7) {
-      stickyBtn.style.transform = 'translateY(100%)';
-      stickyBtn.style.opacity = '0';
-    } else {
+  // Sticky button — mobile only, show on scroll down, hide on scroll up
+  let lastScrollY = window.scrollY || 0;
+
+  function isMobile() { return window.innerWidth <= 960; }
+
+  function showSticky() {
+    if (!stickyBtn || !isMobile()) return;
+    stickyBtn.style.display = 'flex';
+    requestAnimationFrame(() => {
       stickyBtn.style.transform = 'translateY(0)';
-      stickyBtn.style.opacity = '1';
-    }
+    });
   }
-  // Also hide when donate section is in view
+  function hideSticky() {
+    if (!stickyBtn) return;
+    stickyBtn.style.transform = 'translateY(110%)';
+  }
+
+  // Hide when donate is visible
   if (donateSection && stickyBtn) {
-    const stickyObs = new IntersectionObserver((entries) => {
+    const donObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          stickyBtn.style.transform = 'translateY(100%)';
-          stickyBtn.style.opacity = '0';
-        } else {
-          updateStickyBtn();
-        }
+        if (e.isIntersecting) hideSticky();
+        else if (isMobile() && (window.scrollY || 0) > 300) showSticky();
       });
-    }, { threshold: 0.2 });
-    stickyObs.observe(donateSection);
+    }, { threshold: 0.1 });
+    donObs.observe(donateSection);
   }
-  window.addEventListener('scroll', updateStickyBtn, { passive: true });
-  updateStickyBtn();
+
+  window.addEventListener('scroll', function() {
+    if (!isMobile()) { hideSticky(); return; }
+    const currentY = window.scrollY || window.pageYOffset;
+    const diff = currentY - lastScrollY;
+    if (currentY < 200) {
+      hideSticky();
+    } else if (diff > 5) {
+      // scrolling down — show (unless donate visible)
+      if (donateSection) {
+        const r = donateSection.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.9) { lastScrollY = currentY; return; }
+      }
+      showSticky();
+    } else if (diff < -5) {
+      // scrolling up — hide
+      hideSticky();
+    }
+    lastScrollY = currentY;
+  }, { passive: true });
+
+  // Init
+  hideSticky();
 
 
   // ── JOURNEY GALLERY LIGHTBOX ──
@@ -1338,7 +1362,7 @@
 
 <!-- Sticky mobile support button -->
 <a href="#donate" class="sticky-support-btn btn-support-sticky" id="sticky-btn">
-  &#x2764; Support the Journey
+  &#x2764; Support My Journey
 </a>
 
 </body>
