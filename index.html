@@ -996,9 +996,14 @@
     <li><a href="#donate" class="nav-cta nav-cta-gray">❤️&nbsp; Support Me</a></li>
   </ul>
 
-  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
+  <div style="display:flex;align-items:center;gap:0.6rem;">
+    <a href="#photos" aria-label="Journey in Moments" style="display:flex;align-items:center;color:var(--red);text-decoration:none;padding:6px;border-radius:50%;background:#fff0f0;transition:background 0.2s;" onmouseover="this.style.background='#ffdede'" onmouseout="this.style.background='#fff0f0'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0-2h-1l-5 9h2.5l2-3.5"/><path d="m12 6 1 3h5l1 1.5"/></svg>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- Mobile dropdown menu -->
