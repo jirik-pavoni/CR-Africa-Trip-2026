@@ -222,11 +222,12 @@
       .section > .section-inner, .photos-section > .section-inner, .supporters-section > .section-inner { max-width: 95vw; }
     }
     @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; max-width: 100vw; padding-top: 0; }
-      .hero-map-col { height: 160vw; min-height: 160vw; justify-content: center; padding: 0; overflow: hidden; }
+      .hero { display: flex; flex-direction: column; min-height: auto; max-width: 100vw; padding-top: 0; }
+      .hero-right { display: contents; }
+      .hero-logo-banner { order: 1; padding: 1.5rem 2rem 0; border-bottom: none; margin-bottom: 0; }
+      .hero-map-col { order: 2; height: 160vw; min-height: 160vw; justify-content: center; padding: 0; overflow: hidden; margin-top: 0; border-top: none; }
+      .hero-content { order: 3; padding: 1.5rem 2rem 2.5rem; }
       .hero-map-col img { width: auto; height: 160%; max-width: none; object-fit: contain; object-position: center top; }
-      .hero-logo-banner { padding: 1.5rem 2rem 0.5rem; }
-      .hero-content { padding: 1.5rem 2rem 2.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .km-options { grid-template-columns: repeat(2, 1fr); }
       .stat-divider { display: none; }
@@ -1037,7 +1038,6 @@
       </p>
       <div class="hero-btns">
         <a href="#donate" class="btn-primary">❤️&nbsp; Support My Journey</a>
-        <a href="#about" class="btn-support" onclick="showTab('challenge')">The Challenge &rarr;</a>
       </div>
     </div>
   </div>
